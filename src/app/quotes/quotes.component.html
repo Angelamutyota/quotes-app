@@ -11,7 +11,7 @@
      
       <ul>
         <div *ngFor='let quotes of quotes; let i = index'>
-          <li>{{quotes.title}}</li>
+          <li class="quote-title">{{quotes.title}}</li>
           <button (click)='toggleDetails(i)' class="btn-info btn-sm" > Details </button>
           <app-quotes-detail *ngIf= 'quotes.showDetails' [quotes]= 'quotes' (isComplete) = 'deleteQuote($event,i)'></app-quotes-detail>
          </div>
