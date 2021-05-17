@@ -1,5 +1,8 @@
 <p>
     {{quotes.quote}}
 </p>
-<button (click)= 'quoteDelete(true)'> delete</button>
+<p> posted by: {{quotes.name}} on {{quotes.dateWritten| date}}</p>
+<button class="btn-success btn-sm" (click)= 'upvote()'>likes {{quotes.ups}}<i class="fa fa-thumbs-up" id="like"></i></button>
+<button class="btn btn-sm hate" (click)= 'downvote()'>dislikes{{quotes.downs}}<i class="fa fa-thumbs-down" id="dislike"></i></button>
+<button (click)= 'quoteDelete(true)' class="btn-danger btn-sm" > delete</button>
 
