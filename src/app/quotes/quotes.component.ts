@@ -1,31 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import { Quotes } from '../quotes'
+import { HttpClient } from '@angular/common/http';
+import {Quotes } from '../quotes'
+import { QuoteService } from '../quote-service/quote.service';
+import { Quoty } from '../quote-class/quote'
+import { Quote } from '@angular/compiler';
+import { AlertService } from '../alert-service/alert.service';
 
 @Component({
   selector: 'app-quotes',
   templateUrl: './quotes.component.html',
   styleUrls: ['./quotes.component.css']
 })
+
 export class QuotesComponent implements OnInit {
+  quote: Quoty;
 
-  quotes: Quotes [] = [
-    new Quotes(1, 'Angela Mutyota', 'Rising Up', 'The greatest glory in living lies not in never falling, but in rising every time we fall.', new Date(2020,4,8), 0, 0),
-    new Quotes(2, 'Imelda Mita', 'Getting Started', 'The way to get started is to quit talking and begin doing.', new Date (2019,3,19), 0, 0 ),
-    new Quotes(3, 'Martin Noti','Time Management', "Your time is limited, so don't waste it living someone else's life. Don't be trapped by dogma – which is living with the results of other people's thinking.", new Date (2016,6,12),0 ,0),
-    new Quotes(4, 'Letti Wan', 'Flavoured Life', 'If life were predictable it would cease to be life, and be without flavor.', new Date (2017,5,14), 0, 0),
-    new Quotes(5, 'Satin Ola', 'setting goals', "If you set your goals ridiculously high and it's a failure, you will fail above everyone else's success.", new Date( 2010,7,7), 0, 0),
-    new Quotes(6, 'Messi Patty', 'Setting Goals', "If you set your goals ridiculously high and it's a failure, you will fail above everyone else's success.", new Date (2014,9,30), 0, 0),
-  ];
-
+  
   toggleDetails(index: string | any){
     this.quotes[index].showDetails = !this.quotes[index].showDetails;
   }
   
   deleteQuote(isComplete, index){
     if(isComplete){
-      let toDelete = confirm(`Are you sure you want to delete ${this.quotes[index].name}?`)
+      let toDelete = confirm(`Are you sure you want to delete ${this.quotes[index].title}?`)
       if (toDelete){
         this.quotes.splice(index,1)
+        this.alertService.alertMe("the quote has been deleted")
     }
     }
   }
@@ -36,9 +36,27 @@ export class QuotesComponent implements OnInit {
     quote.completeDate = new Date(quote.completeDate)
     this.quotes.push(quote)
   }
-  constructor() { }
+
+  quotes: Quotes[];
+  alertService:AlertService
+  constructor(quoteService:QuoteService, alertService:AlertService, private http:HttpClient) {
+    this.quotes = quoteService.getQuotes()
+    this.alertService = alertService;
+   }
 
   ngOnInit(): void {
+
+    interface ApiResponse {
+      author : string;
+      quote: string;
+    }
+     
+    this.http.get<ApiResponse>("http://quotes.stormconsultanchy.co.uk/random.json").subscribe(data=>{
+      this.quote = new Quoty (data.author, data.quote)
+    },err=>{
+      this.quote = new Quoty("Winston Churchill","Never never give up!")
+      console.log("An error occurred")
+    })
   }
 
 }
