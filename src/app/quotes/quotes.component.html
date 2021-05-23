@@ -13,8 +13,8 @@
       <ul>
         <div *ngFor='let quotes of quotes; let i = index'>
           <li appHighlight class="quote-title">{{quotes.title}}</li>
-          <button (click)='toggleDetails(i)' class="btn-info btn-sm" > Details </button>
-          <app-quotes-detail *ngIf= 'quotes.showDetails' [quotes]= 'quotes' (isComplete) = 'deleteQuote($event,i)'></app-quotes-detail>
+          <button (click)='goToUrl(quotes.id)' class="btn-info btn-sm" > Details </button>
+          <button class="btn btn-outline-danger" (click)='deleteQuote(i)'>Delete Quote</button>
          </div>
        </ul>
        <p>

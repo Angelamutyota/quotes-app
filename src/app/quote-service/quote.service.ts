@@ -9,5 +9,7 @@ export class QuoteService {
   getQuotes(){
     return quotes
   }
+
+
   constructor() { }
 }
